@@ -12,13 +12,13 @@ const OneVisitCard = ({ reference, createdAt, id, active }) => {
     if (allVisits.find((c) => c.active === true)) return;
     await editVisitStatus(id, { active: true });
     const newAllVisits = allVisits.map((c) => (c._id === id ? { ...c, active: true } : c));
-    dispatch(visitsActions.getAllVisits(newAllVisits));
+    dispatch(visitsActions.setAllVisits(newAllVisits));
   }
 
   async function handleCancelVisit(id) {
     await cancelVisit(id);
     const newAllVisits = allVisits.filter((v) => v._id !== id);
-    dispatch(visitsActions.getAllVisits(newAllVisits));
+    dispatch(visitsActions.setAllVisits(newAllVisits));
   }
 
   return (

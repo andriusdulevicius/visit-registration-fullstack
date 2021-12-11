@@ -15,7 +15,7 @@ const PublicScreen = () => {
     await addNewVisit(newVisit);
     const newAllVisits = await getVisits();
 
-    dispatch(visitsActions.getAllVisits(newAllVisits));
+    dispatch(visitsActions.setAllVisits(newAllVisits));
   }
 
   return (

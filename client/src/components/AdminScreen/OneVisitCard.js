@@ -1,9 +1,7 @@
 import React from 'react';
-import { cancelCostumerVisit, editCostumerStatus, getCostumers } from '../../apis/fetch';
-
+import { cancelVisit, editVisitStatus } from '../../apis/fetch';
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions } from '../../store/authRedux';
-import { visitsActions } from '../../store/visitsRedux';
+import { visitsActions } from '../../store/visitsActions';
 import css from './AdminScreen.module.css';
 
 const OneVisitCard = ({ reference, createdAt, id, active }) => {
@@ -12,21 +10,15 @@ const OneVisitCard = ({ reference, createdAt, id, active }) => {
 
   async function setActiveVisit(id) {
     if (allVisits.find((c) => c.active === true)) return;
-    await editCostumerStatus(id, { active: true });
+    await editVisitStatus(id, { active: true });
     const newAllVisits = allVisits.map((c) => (c._id === id ? { ...c, active: true } : c));
-    dispatch(visitsActions.getAllVisits2(newAllVisits));
+    dispatch(visitsActions.getAllVisits(newAllVisits));
   }
 
-  async function handleEnnOfVisit(id) {
-    await editCostumerStatus(id, { active: false });
-    await cancelCostumerVisit(id);
-    const newAllVisits = allVisits.filter((v) => v._id !== id);
-    dispatch(visitsActions.getAllVisits2(newAllVisits));
-  }
   async function handleCancelVisit(id) {
-    await cancelCostumerVisit(id);
+    await cancelVisit(id);
     const newAllVisits = allVisits.filter((v) => v._id !== id);
-    dispatch(visitsActions.getAllVisits2(newAllVisits));
+    dispatch(visitsActions.getAllVisits(newAllVisits));
   }
 
   return (
@@ -37,7 +29,7 @@ const OneVisitCard = ({ reference, createdAt, id, active }) => {
         <button className={css.invite} disabled={active} onClick={() => setActiveVisit(id)}>
           Invite client
         </button>
-        <button className={css.end} disabled={!active} onClick={() => handleEnnOfVisit(id)}>
+        <button className={css.end} disabled={!active} onClick={() => handleCancelVisit(id)}>
           End of visit
         </button>
         <button className={css.cancel} onClick={() => handleCancelVisit(id)}>

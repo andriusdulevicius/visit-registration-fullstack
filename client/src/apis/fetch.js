@@ -13,11 +13,11 @@ const reqOptions = {
   referrerPolicy: 'no-referrer',
 };
 
-export const addNewCostumer = async (newCostumer) => {
+export const addNewVisit = async (newVisit) => {
   try {
-    const res = await fetch(`${fetchApiUrl}/addNewCostumer`, {
+    const res = await fetch(`${fetchApiUrl}/addNewVisit`, {
       method: 'POST',
-      body: JSON.stringify(newCostumer),
+      body: JSON.stringify(newVisit),
       ...reqOptions,
     });
     await res.json();
@@ -26,17 +26,17 @@ export const addNewCostumer = async (newCostumer) => {
   }
 };
 
-export const getCostumers = async () => {
+export const getVisits = async () => {
   try {
-    const res = await fetch(`${fetchApiUrl}/allCostumers`, reqOptions);
+    const res = await fetch(`${fetchApiUrl}/allVisits`, reqOptions);
     const data = await res.json();
     return data;
   } catch (err) {
-    console.log('Get all users error: ', err);
+    console.log('Get all visits error: ', err);
   }
 };
 
-export const cancelCostumerVisit = async (id) => {
+export const cancelVisit = async (id) => {
   try {
     const res = await fetch(`${fetchApiUrl}/delete/${id}`, {
       method: 'DELETE',
@@ -48,11 +48,15 @@ export const cancelCostumerVisit = async (id) => {
   }
 };
 
-export const editCostumerStatus = async (id, newBody) => {
-  const res = await fetch(`${fetchApiUrl}/edit/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(newBody),
-    ...reqOptions,
-  });
-  await res.json();
+export const editVisitStatus = async (id, newBody) => {
+  try {
+    const res = await fetch(`${fetchApiUrl}/edit/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(newBody),
+      ...reqOptions,
+    });
+    await res.json();
+  } catch (err) {
+    console.log('An error trying to edit visit', err);
+  }
 };

@@ -12,9 +12,6 @@ export const visitsSlice = createSlice({
     getAllVisits(state, action) {
       state.allVisits = action.payload;
     },
-    getAllVisits2(state, action) {
-      state.allVisits = action.payload;
-    },
     setActiveVisit(state, action) {
       state.activeVisit = action.payload;
     },

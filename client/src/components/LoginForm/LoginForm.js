@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions } from '../../store/authRedux';
+import { authActions } from '../../store/authActions';
 import css from './LoginForm.module.css';
 
 const LoginForm = () => {

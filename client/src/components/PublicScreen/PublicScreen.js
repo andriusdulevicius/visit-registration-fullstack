@@ -1,13 +1,21 @@
 import React from 'react';
 import uuid from 'react-uuid';
-import { addNewCostumer } from '../../apis/fetch';
-
+import { useDispatch } from 'react-redux';
+import { visitsActions } from '../../store/visitsActions';
+import { addNewVisit, getVisits } from '../../apis/fetch';
 import css from './PublicScreen.module.css';
 import { Link } from 'react-router-dom';
 
 const PublicScreen = () => {
-  function handleNewBooking() {
-    addNewCostumer({ reference: uuid().slice(0, 5), active: false });
+  const dispatch = useDispatch();
+
+  async function handleNewBooking() {
+    const randomRef = uuid().slice(0, 5);
+    const newVisit = { reference: randomRef, active: false };
+    await addNewVisit(newVisit);
+    const newAllVisits = await getVisits();
+
+    dispatch(visitsActions.getAllVisits(newAllVisits));
   }
 
   return (
@@ -21,12 +29,6 @@ const PublicScreen = () => {
           Join waiting line
         </Link>
       </div>
-      {/* <p className={css.caption}>
-        Current waiting time is around XXX minutes. Already registered an appointment?{' '}
-        <Link to='/booking' className={css.booking}>
-          Go back to waiting page
-        </Link>
-      </p> */}
     </div>
   );
 };

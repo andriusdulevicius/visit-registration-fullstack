@@ -1,41 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCostumers, cancelCostumerVisit } from '../../apis/fetch';
+import { cancelVisit } from '../../apis/fetch';
+import { useSelector } from 'react-redux';
 import css from './BookingScreen.module.css';
 import AnimatedCard from './AnimatedCard';
 import { RiUser3Fill, RiUser3Line, RiUserVoiceFill } from 'react-icons/ri';
 
-const availableConsultants = 1;
-
 const BookingScreen = () => {
   const [peopleInLine, setPeopleInLine] = useState(0);
-  const [registeredPersonsRef, setRegisteredPersonsRef] = useState('');
-  const [registeredPersonsId, setRegisteredPersonsId] = useState('');
+  const [registeredVisitsRef, setRegisteredVisitsRef] = useState('');
+  const [registeredVisitsId, setRegisteredVisitsId] = useState('');
   const navigate = useNavigate();
+  const availableConsultants = useSelector((state) => state.auth.users).length;
+  const allVisits = useSelector((state) => state.visits.allVisits);
 
   useEffect(() => {
-    (async () => {
-      const existingCostumers = await getCostumers();
-      if (existingCostumers) {
-        setPeopleInLine(existingCostumers.length - 1);
-      }
-    })();
-    setPersonalInfo();
-  }, []);
-
-  async function setPersonalInfo() {
-    const costumersArr = await getCostumers();
-    if (costumersArr) {
-      const sortedCostumersArr = costumersArr.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-      const latestPersonsRef = sortedCostumersArr[0].reference;
-      const latestPersonsId = sortedCostumersArr[0]._id;
-      setRegisteredPersonsRef(latestPersonsRef);
-      setRegisteredPersonsId(latestPersonsId);
+    if (allVisits && allVisits.length > 0) {
+      setPeopleInLine(allVisits.length - 1);
+      const sortedVisits = [...allVisits].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+      setRegisteredVisitsRef(sortedVisits[0].reference);
+      setRegisteredVisitsId(sortedVisits[0]._id);
     }
-  }
+  }, [allVisits]);
 
   async function handleCancelation() {
-    await cancelCostumerVisit(registeredPersonsId);
+    await cancelVisit(registeredVisitsId);
     navigate('/');
   }
 
@@ -69,7 +58,7 @@ const BookingScreen = () => {
             be invited to your appointment shortly...
           </h4>
           <h4 className={css.reference}>
-            Your booking reference number is <strong>{registeredPersonsRef}</strong>
+            Your booking reference number is <strong>{registeredVisitsRef}</strong>
           </h4>
         </>
       )}

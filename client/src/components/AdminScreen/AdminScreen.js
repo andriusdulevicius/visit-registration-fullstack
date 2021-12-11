@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import css from './AdminScreen.module.css';
 import OneVisitCard from './OneVisitCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions } from '../../store/authRedux';
-import { visitsActions } from '../../store/visitsRedux';
-import { getCostumers } from '../../apis/fetch';
+import { authActions } from '../../store/authActions';
+import { visitsActions } from '../../store/visitsActions';
+import { getVisits } from '../../apis/fetch';
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -13,8 +13,8 @@ const AdminScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const presentCostumers = await getCostumers();
-        dispatch(visitsActions.getAllVisits(presentCostumers));
+        const presentVisits = await getVisits();
+        dispatch(visitsActions.getAllVisits(presentVisits));
       } catch (err) {
         console.log(err);
       }

@@ -1,0 +1,70 @@
+.main {
+  margin: 2rem;
+  text-align: center;
+  font-weight: normal;
+  font-size: 2rem;
+}
+
+.visualisation {
+  margin: 3rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: fit-content;
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.green {
+  background-color: green;
+}
+.gray {
+  background-color: gray;
+}
+.yellow {
+  background-color: rgb(243, 243, 113);
+}
+
+.info {
+  text-align: center;
+}
+
+.reference {
+  margin: 3rem 0;
+  font-size: 3rem;
+  text-align: center;
+  font-weight: normal;
+}
+
+.cancel {
+  display: block;
+  margin: 2rem auto;
+  padding: 0.5rem 0.8rem;
+  background-color: rgba(182, 38, 38, 0.836);
+  color: snow;
+  border: none;
+  border-radius: 0.6rem;
+  font-size: 1.5rem;
+}
+
+.cancel:hover,
+.cancel:active {
+  transform: scale(1.1);
+  transition: transform 0.1s ease-in-out;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}
+
+@media screen and (max-width: 40rem) {
+  .visualisation {
+    flex-direction: column;
+  }
+}

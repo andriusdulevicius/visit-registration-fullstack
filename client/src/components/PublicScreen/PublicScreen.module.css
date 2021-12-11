@@ -1,0 +1,35 @@
+.public {
+  padding-top: 3rem;
+  text-align: center;
+}
+
+.caption {
+  color: rgba(128, 128, 128, 0.61);
+}
+
+.button {
+  max-width: 14rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 2.5rem;
+  margin: 2rem auto;
+  background-color: rgb(54, 134, 54);
+  border-radius: 0.8rem;
+}
+
+.button:hover {
+  color: white;
+}
+
+.button:active {
+  transform: scale(1.1);
+  transition: transform 0.1s ease-in-out;
+}
+
+.booking {
+  color: black;
+}
+
+.booking:hover {
+  color: rgba(128, 128, 128, 0.384);
+}

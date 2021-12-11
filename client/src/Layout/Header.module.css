@@ -1,0 +1,21 @@
+.header {
+  color: snow;
+  background-color: grey;
+}
+
+.container {
+  max-width: 80rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0.5rem;
+}
+
+.logo {
+  font-size: 1.6rem;
+}
+
+.nav > a {
+  padding-left: 2rem;
+}

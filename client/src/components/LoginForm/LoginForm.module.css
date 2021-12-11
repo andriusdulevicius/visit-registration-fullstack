@@ -1,0 +1,76 @@
+.auth {
+  position: relative;
+  box-sizing: border-box;
+  top: 5rem;
+  margin: 0 auto;
+  box-shadow: 5px 5px 5px 5px rgba(128, 127, 127, 0.63);
+  width: 24rem;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.auth h2 {
+  color: white;
+  font-size: 0.8rem;
+  text-align-last: left;
+  font-weight: 550;
+  padding: 1.3rem;
+  background-color: rgb(116, 116, 116);
+}
+
+.auth form {
+  background-color: snow;
+  padding: 1.3rem;
+  position: relative;
+}
+.control {
+  margin-bottom: 1rem;
+  background-color: snow;
+}
+
+.control input {
+  display: block;
+  width: 90%;
+  height: 3rem;
+  font-size: 0.7rem;
+  background-color: rgba(224, 223, 223, 0.438);
+  color: rgba(80, 80, 80, 0.767);
+  font-weight: 600;
+  margin: 0;
+  border-radius: 3px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+}
+
+.error-msg {
+  position: absolute;
+  color: red;
+  font-size: 0.7rem;
+  opacity: 0.8;
+  margin: 0.3rem 0;
+  display: block;
+}
+.auth button {
+  background-color: rgb(116, 116, 116);
+  width: 100%;
+  text-align: center;
+  color: snow;
+  padding: 0.6rem 1.5rem;
+  margin-top: 1.8rem;
+  border: none;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.auth button:hover {
+  transform: scale(1.1);
+}
+
+@media screen and (max-width: 424px) {
+  .auth {
+    width: 90%;
+    margin: 0 auto;
+    top: 80px;
+  }
+}

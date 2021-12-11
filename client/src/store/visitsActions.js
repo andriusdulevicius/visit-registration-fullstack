@@ -9,7 +9,7 @@ export const visitsSlice = createSlice({
   name: 'visits',
   initialState: INITIAL_STATE,
   reducers: {
-    getAllVisits(state, action) {
+    setAllVisits(state, action) {
       state.allVisits = action.payload;
     },
     setActiveVisit(state, action) {

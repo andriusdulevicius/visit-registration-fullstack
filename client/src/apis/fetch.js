@@ -1,5 +1,5 @@
 const fetchApiUrl =
-  process.env.NODE_ENV === 'production' ? 'https://nfq-backend.herokuapp.com' : 'http://localhost:5000';
+  process.env.NODE_ENV === 'production' ? 'https://nfq-task-react-express.herokuapp.com' : 'http://localhost:5000';
 
 const reqOptions = {
   mode: 'cors',

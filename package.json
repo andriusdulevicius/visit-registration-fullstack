@@ -6,10 +6,11 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "front": "npm start --prefix client",
-    "install-f": "npm i --prefix client",
+    "install-front": "npm i --prefix client",
+    "start-front": "npm start --prefix client",
+    "build-front": "npm build --prefix client",
     "install-b": "npm i",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false install-front && build-front"
   },
   "author": "",
   "license": "ISC",

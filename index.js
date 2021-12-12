@@ -38,4 +38,4 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(PORT, console.log(`Back end online on port ${PORT}`));
+app.listen(process.env.PORT || PORT, console.log(`Back end online on port ${PORT}`));

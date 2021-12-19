@@ -1,0 +1,34 @@
+### add new consultant
+
+POST http://localhost:5000/addNewConsultant
+Content-Type: application/json
+
+{
+    "email":"andrius@gmail.com",
+    "password":"cool",
+    "isLoggedIn": "true",
+    "visits": []
+}
+
+### add new consultant
+
+POST http://localhost:5000/addNewConsultant
+Content-Type: application/json
+
+{
+    "email":"nfq@gmail.com",
+    "password":"cool",
+    "isLoggedIn": "true",
+    "visits": []
+}
+
+### get consultant
+
+POST http://localhost:5000/consultant
+Content-Type: application/json
+
+{
+    "email":"nfq@gmail.com",
+    "password":"cool",
+    "isLoggedIn": true
+}

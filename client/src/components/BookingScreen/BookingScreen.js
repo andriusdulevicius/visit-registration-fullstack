@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { cancelVisit } from '../../apis/fetch';
+import { cancelVisit, getConsultant } from '../../apis/fetch';
 import { useSelector } from 'react-redux';
 import css from './BookingScreen.module.css';
 import AnimatedCard from './AnimatedCard';
@@ -11,16 +11,19 @@ const BookingScreen = () => {
   const [registeredVisitsRef, setRegisteredVisitsRef] = useState('');
   const [registeredVisitsId, setRegisteredVisitsId] = useState('');
   const navigate = useNavigate();
-  const availableConsultants = useSelector((state) => state.auth.users).length;
+  const consultantVisits = useSelector((state) => state.auth.users)?.length;
   const allVisits = useSelector((state) => state.visits.allVisits);
 
   useEffect(() => {
-    if (allVisits && allVisits.length > 0) {
-      setPeopleInLine(allVisits.length - 1);
-      const sortedVisits = [...allVisits].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-      setRegisteredVisitsRef(sortedVisits[0].reference);
-      setRegisteredVisitsId(sortedVisits[0]._id);
-    }
+    (async () => {
+      const currentConsultant = await getConsultant();
+    })();
+    // if (allVisits && allVisits.length > 0) {
+    //   setPeopleInLine(allVisits.length - 1);
+    //   const sortedVisits = [...allVisits].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+    //   setRegisteredVisitsRef(sortedVisits[0].reference);
+    //   setRegisteredVisitsId(sortedVisits[0]._id);
+    // }
   }, [allVisits]);
 
   async function handleCancelation() {
@@ -28,7 +31,7 @@ const BookingScreen = () => {
     navigate('/');
   }
 
-  const averageWaitingTime = Math.round((peopleInLine / availableConsultants) * 5);
+  const averageWaitingTime = Math.round((peopleInLine / consultantVisits) * 5);
 
   return (
     <div className='container'>
@@ -54,8 +57,7 @@ const BookingScreen = () => {
         <>
           <h4 className={css.info}>
             You have {peopleInLine} {peopleInLine !== 1 ? 'people' : 'person'} in front of you. The waiting time is
-            approximately {availableConsultants > peopleInLine ? 0 : averageWaitingTime} minutes at the moment. You will
-            be invited to your appointment shortly...
+            approximately {averageWaitingTime} minutes at the moment. You will be invited to your appointment shortly...
           </h4>
           <h4 className={css.reference}>
             Your booking reference number is <strong>{registeredVisitsRef}</strong>

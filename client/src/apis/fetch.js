@@ -15,6 +15,12 @@ const reqOptions = {
 
 export const addNewVisit = async (newVisit) => {
   try {
+    // const data = await fetch(`${fetchApiUrl}/allConsultants`, reqOptions);
+    // const consultants = await data.json();
+    // const loggedInConsultants = consultants.filter((c) => c.isLoggedIn);
+    // const leastBusyConsultant = loggedInConsultants.sort((a, b) => (a.visits.length < b.visits.length ? 1 : -1))[0];
+    // console.log(leastBusyConsultant);
+
     const res = await fetch(`${fetchApiUrl}/addNewVisit`, {
       method: 'POST',
       body: JSON.stringify(newVisit),
@@ -58,5 +64,20 @@ export const editVisitStatus = async (id, newBody) => {
     await res.json();
   } catch (err) {
     console.log('An error trying to edit visit', err);
+  }
+};
+
+export const getConsultant = async (email, password, isLoggedIn) => {
+  try {
+    const res = await fetch(`${fetchApiUrl}/consultant`, {
+      method: 'POST',
+      body: JSON.stringify({ email, password, isLoggedIn }),
+      ...reqOptions,
+    });
+    console.log(res);
+
+    return await res.json();
+  } catch (err) {
+    console.log('An error trying to get consultant', err);
   }
 };

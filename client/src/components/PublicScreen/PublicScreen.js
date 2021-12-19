@@ -12,8 +12,8 @@ const PublicScreen = () => {
   async function handleNewBooking() {
     const randomRef = uuid().slice(0, 5);
     const newVisit = { reference: randomRef, active: false };
-    await addNewVisit(newVisit);
-    const newAllVisits = await getVisits();
+    const newAllVisits = await addNewVisit(newVisit);
+    console.log({ newAllVisits });
 
     dispatch(visitsActions.setAllVisits(newAllVisits));
   }

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { authActions } from '../../store/authActions';
+import { getConsultant } from '../../apis/fetch';
 import css from './LoginForm.module.css';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [err, setErr] = useState('');
-  const existingUsers = useSelector((state) => state.auth.users);
   const dispatch = useDispatch();
 
   const errorList = {
@@ -29,9 +29,10 @@ const LoginForm = () => {
       setErr('INVALID_EMAIL');
     }
 
-    const authentification = existingUsers.find((user) => user.email === email && user.password === password);
+    const authentification = await getConsultant(email, password, true);
+    console.log(authentification);
+
     if (authentification) {
-      dispatch(authActions.setLoggedInUser({ email, password }));
       dispatch(authActions.login());
     } else return setErr('INVALID_USER');
   };

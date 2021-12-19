@@ -11,6 +11,10 @@ const visitSchema = new Schema(
       type: Boolean,
       required: true,
     },
+    consultant: {
+      type: Schema.Types.ObjectId,
+      ref: 'Consultant',
+    },
   },
   { timestamps: true }
 );

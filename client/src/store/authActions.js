@@ -4,8 +4,6 @@ export const authSlice = createSlice({
   name: 'authentication',
   initialState: {
     isAuthenticated: false,
-    users: [{ email: 'frontend@isawesome.com', password: 'cool' }],
-    loggedInUser: {},
   },
   reducers: {
     login(state) {
@@ -13,9 +11,6 @@ export const authSlice = createSlice({
     },
     logout(state) {
       state.isAuthenticated = false;
-    },
-    setLoggedInUser(state, action) {
-      state.loggedInUser = action.payload;
     },
   },
 });

@@ -5,13 +5,7 @@ import AdminScreen from '../components/AdminScreen/AdminScreen';
 
 const Admin = () => {
   const auth = useSelector((state) => state.auth.isAuthenticated);
-
-  return (
-    <>
-      {auth && <AdminScreen />}
-      {!auth && <LoginForm />}
-    </>
-  );
+  return auth ? <AdminScreen /> : <LoginForm />;
 };
 
 export default Admin;

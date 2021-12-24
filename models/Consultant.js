@@ -15,10 +15,10 @@ const consultantSchema = new Schema(
       type: Boolean,
       required: true,
     },
-    visits: [
+    visitors: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Visit',
+        ref: 'Visitor',
       },
     ],
   },

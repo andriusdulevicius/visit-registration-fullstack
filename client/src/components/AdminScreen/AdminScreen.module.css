@@ -62,6 +62,11 @@ button:disabled {
   background-color: rgb(151, 1, 1);
 }
 
+.noVisitors {
+  display: block;
+  text-align: center;
+}
+
 @media screen and (max-width: 40rem) {
   .ref {
     font-size: 1.2rem;

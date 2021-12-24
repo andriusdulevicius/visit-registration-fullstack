@@ -1,62 +1,109 @@
 const express = require('express');
 const router = express.Router();
-const Visit = require('../models/Visit');
+const bcrypt = require('bcrypt');
+const Visitor = require('../models/Visitor');
 const Consultant = require('../models/Consultant');
 
-router.post('/addNewVisit', async (req, res) => {
+router.get('/visitor', async (req, res) => {
+  try {
+    const { query } = req;
+    const visitors = await Visitor.find({ reference: query.reference }).populate('consultant', {
+      visitors: 1,
+      email: 1,
+      isLoggedIn: 1,
+    });
+    res.json(visitors);
+  } catch (err) {
+    res.status(500).json('internal error');
+  }
+});
+
+router.post('/visitor', async (req, res) => {
   try {
     const consultants = await Consultant.find();
-    console.log({ consultants });
     const loggedInConsultants = consultants.filter((c) => c.isLoggedIn);
-    console.log({ loggedInConsultants });
-    const leastBusyConsultant = loggedInConsultants.sort((a, b) => (a.visits.length < b.visits.length ? 1 : -1))[0];
-    console.log({ leastBusyConsultant });
-    const newVisit = await new Visit({ ...req.body, consultant: leastBusyConsultant._id });
-    console.log(newVisit);
+    const leastBusyConsultant = loggedInConsultants.sort((a, b) => (a.visitors.length < b.visitors.length ? -1 : 1));
+    const newVisitor = await Visitor.create({ ...req.body, consultant: leastBusyConsultant[0] });
 
     await Consultant.findOneAndUpdate(
-      { email: leastBusyConsultant.email },
+      { email: leastBusyConsultant[0].email },
       {
         $addToSet: {
-          visits: newVisit._id,
+          visitors: newVisitor,
         },
       }
     );
 
-    const result = await newVisit.save();
+    const result = await Visitor.findOne({ reference: req.body.reference }).populate('consultant', {
+      visitors: 1,
+      email: 1,
+      isLoggedIn: 1,
+    });
     res.json(result);
   } catch (err) {
     res.json(err);
   }
 });
 
-router.get('/allVisits', async (req, res) => {
+router.delete('/visitor', async (req, res) => {
   try {
-    const visits = await Visit.find();
-    res.json(visits);
+    const visitor = await Visitor.findOne({ reference: req.query.reference });
+    console.log('visitor', visitor);
+    const consultant = await Consultant.findOneAndUpdate(
+      { _id: visitor.consultant },
+      {
+        $pull: {
+          visitors: { $in: visitor._id },
+        },
+      },
+      { new: true }
+    );
+    console.log('consultant', consultant);
+
+    await visitor.delete();
+    res.send({ success: true, msg: `Visitor has been deleted.` });
+  } catch (err) {
+    res.json(err);
+  }
+});
+
+router.put('/visitor', async (req, res) => {
+  try {
+    const { active } = req.body; // TODO remove reference from body
+    await Visitor.findOneAndUpdate(
+      { reference: req.query.reference },
+      {
+        active,
+      }
+    );
+    res.send({ success: true, msg: `Visitor ${req.query.reference} has been updated.` });
+  } catch (err) {
+    res.json(err);
+  }
+});
+
+router.get('/consultant', async (req, res) => {
+  try {
+    const { query } = req;
+    const consultant = await Consultant.findOne(
+      { email: query.email },
+      {
+        visitors: 1,
+        email: 1,
+        isLoggedIn: 1,
+      }
+    ).populate('visitors');
+
+    res.json(consultant);
   } catch (err) {
     res.status(500).json('internal error');
   }
 });
 
-router.delete('/delete/:id', async (req, res) => {
-  await Visit.findOneAndDelete({ _id: req.params.id });
-  res.send({ success: true, msg: `Visit has been deleted.` });
-});
-
-router.put('/edit/:id', async (req, res) => {
-  const { reference, active } = req.body;
-  await Visit.findOneAndUpdate(
-    { _id: req.params.id },
-    {
-      active,
-    }
-  );
-  res.send({ success: true, msg: `Visit ${reference} has been updated.` });
-});
-
-router.post('/addNewConsultant', async (req, res) => {
-  const newConsultant = new Consultant(req.body);
+router.post('/consultant', async (req, res) => {
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(req.body.password, salt);
+  const newConsultant = new Consultant({ ...req.body, password });
   try {
     const result = await newConsultant.save();
     res.json(result);
@@ -74,15 +121,17 @@ router.get('/allConsultants', async (req, res) => {
   }
 });
 
-router.post('/consultant', async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
-    const consultant = await Consultant.findOneAndUpdate(
-      { email: req.body.email, password: req.body.password },
-      { $set: { isLoggedIn: req.body.isLoggedIn } },
-      { new: true }
-    );
+    const consultant = await Consultant.findOne({ email: req.body.email });
+    const validPassword = await bcrypt.compare(req.body.password, consultant.password);
 
-    res.json(consultant);
+    if (validPassword) {
+      const updatedConsultant = consultant.update({ $set: { isLoggedIn: req.body.isLoggedIn } }, { new: true });
+      res.json(updatedConsultant);
+    } else {
+      res.status(400).json({ error: 'Invalid Password' });
+    }
   } catch (err) {
     res.status(500).json('internal error');
   }

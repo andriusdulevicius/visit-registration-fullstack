@@ -1,24 +1,23 @@
 import React from 'react';
-import { cancelVisit, editVisitStatus } from '../../apis/fetch';
 import { useSelector, useDispatch } from 'react-redux';
-import { visitsActions } from '../../store/visitsActions';
 import css from './AdminScreen.module.css';
+import { cancelVisitor, editVisitorStatus } from '../../apis/fetch';
+import { visitorActions } from '../../store';
 
 const OneVisitCard = ({ reference, createdAt, id, active }) => {
   const dispatch = useDispatch();
-  const allVisits = useSelector((state) => state.visits.allVisits);
 
   async function setActiveVisit(id) {
-    if (allVisits.find((c) => c.active === true)) return;
-    await editVisitStatus(id, { active: true });
-    const newAllVisits = allVisits.map((c) => (c._id === id ? { ...c, active: true } : c));
-    dispatch(visitsActions.setAllVisits(newAllVisits));
+    // if (allVisits.find((c) => c.active === true)) return;
+    await editVisitorStatus(id, { active: true });
+    // const newAllVisits = allVisits.map((c) => (c._id === id ? { ...c, active: true } : c));
+    // dispatch(visitorActions.setAllVisits(newAllVisits));
   }
 
   async function handleCancelVisit(id) {
-    await cancelVisit(id);
-    const newAllVisits = allVisits.filter((v) => v._id !== id);
-    dispatch(visitsActions.setAllVisits(newAllVisits));
+    // await cancelVisitor(id);
+    // const newAllVisits = allVisits.filter((v) => v._id !== id);
+    // dispatch(visitorActions.setAllVisits(newAllVisits));
   }
 
   return (
@@ -26,13 +25,13 @@ const OneVisitCard = ({ reference, createdAt, id, active }) => {
       <td className={css.ref}>{reference}</td>
       <td className={css.created}>{createdAt}</td>
       <td className={css.buttons}>
-        <button className={css.invite} disabled={active} onClick={() => setActiveVisit(id)}>
+        <button className={css.invite} disabled={active} onClick={() => {}}>
           Invite client
         </button>
-        <button className={css.end} disabled={!active} onClick={() => handleCancelVisit(id)}>
+        <button className={css.end} disabled={!active} onClick={() => {}}>
           End of visit
         </button>
-        <button className={css.cancel} onClick={() => handleCancelVisit(id)}>
+        <button className={css.cancel} onClick={() => {}}>
           Cancel visit
         </button>
       </td>

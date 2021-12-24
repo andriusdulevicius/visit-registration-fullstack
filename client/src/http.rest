@@ -1,6 +1,6 @@
 ### add new consultant
 
-POST http://localhost:5000/addNewConsultant
+POST http://localhost:5000/consultant
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 ### add new consultant
 
-POST http://localhost:5000/addNewConsultant
+POST http://localhost:5000/consultant
 Content-Type: application/json
 
 {
@@ -32,3 +32,8 @@ Content-Type: application/json
     "password":"cool",
     "isLoggedIn": true
 }
+
+### delete visitor
+
+DELETE http://localhost:5000/visitor?reference=d8bc84
+Content-Type: application/json

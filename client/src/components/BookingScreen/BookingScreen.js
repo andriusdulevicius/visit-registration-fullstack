@@ -1,37 +1,50 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { cancelVisit, getConsultant } from '../../apis/fetch';
-import { useSelector } from 'react-redux';
+import { RiUser3Fill, RiUser3Line, RiUserVoiceFill } from 'react-icons/ri';
 import css from './BookingScreen.module.css';
 import AnimatedCard from './AnimatedCard';
-import { RiUser3Fill, RiUser3Line, RiUserVoiceFill } from 'react-icons/ri';
+import config from '../../config';
+import { visitorActions } from '../../store';
+import { cancelVisitor, getVisitor } from '../../apis/fetch';
 
 const BookingScreen = () => {
+  const dispatch = useDispatch();
+
   const [peopleInLine, setPeopleInLine] = useState(0);
-  const [registeredVisitsRef, setRegisteredVisitsRef] = useState('');
-  const [registeredVisitsId, setRegisteredVisitsId] = useState('');
+  const [timeToWait, setTimeToWait] = useState(0);
+  const { consultant, _id, reference: ref } = useSelector((state) => state.visitor);
+
   const navigate = useNavigate();
-  const consultantVisits = useSelector((state) => state.auth.users)?.length;
-  const allVisits = useSelector((state) => state.visits.allVisits);
+
+  const handleCancelation = async () => {
+    await cancelVisitor(ref);
+    navigate('/');
+  };
 
   useEffect(() => {
-    (async () => {
-      const currentConsultant = await getConsultant();
-    })();
-    // if (allVisits && allVisits.length > 0) {
-    //   setPeopleInLine(allVisits.length - 1);
-    //   const sortedVisits = [...allVisits].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-    //   setRegisteredVisitsRef(sortedVisits[0].reference);
-    //   setRegisteredVisitsId(sortedVisits[0]._id);
-    // }
-  }, [allVisits]);
+    if (consultant) {
+      const { visitors } = consultant;
+      const waitPerPerson = 5;
+      const peopleInFront = visitors.indexOf(_id);
+      const waitTime = peopleInFront * waitPerPerson;
+      setPeopleInLine(peopleInFront);
+      setTimeToWait(waitTime);
+    }
+  }, [consultant]);
 
-  async function handleCancelation() {
-    await cancelVisit(registeredVisitsId);
-    navigate('/');
-  }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getVisitor(ref)
+        .then((data) => {
+          const { consultant, reference, _id } = data[0];
+          dispatch(visitorActions.setVisitor({ consultant, reference, _id }));
+        })
+        .catch((err) => console.error(err));
+    }, config.dataUptadeRate);
 
-  const averageWaitingTime = Math.round((peopleInLine / consultantVisits) * 5);
+    return () => clearInterval(interval);
+  }, [ref]);
 
   return (
     <div className='container'>
@@ -57,10 +70,10 @@ const BookingScreen = () => {
         <>
           <h4 className={css.info}>
             You have {peopleInLine} {peopleInLine !== 1 ? 'people' : 'person'} in front of you. The waiting time is
-            approximately {averageWaitingTime} minutes at the moment. You will be invited to your appointment shortly...
+            approximately {timeToWait} minutes at the moment. You will be invited to your appointment shortly...
           </h4>
           <h4 className={css.reference}>
-            Your booking reference number is <strong>{registeredVisitsRef}</strong>
+            Your booking reference number is <strong>{ref}</strong>
           </h4>
         </>
       )}

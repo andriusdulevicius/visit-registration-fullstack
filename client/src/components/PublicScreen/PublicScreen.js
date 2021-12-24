@@ -1,21 +1,19 @@
 import React from 'react';
 import uuid from 'react-uuid';
-import { useDispatch } from 'react-redux';
-import { visitsActions } from '../../store/visitsActions';
-import { addNewVisit, getVisits } from '../../apis/fetch';
-import css from './PublicScreen.module.css';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import css from './PublicScreen.module.css';
+import { visitorActions } from '../../store';
+import { addNewVisitor } from '../../apis/fetch';
 
 const PublicScreen = () => {
   const dispatch = useDispatch();
 
   async function handleNewBooking() {
-    const randomRef = uuid().slice(0, 5);
-    const newVisit = { reference: randomRef, active: false };
-    const newAllVisits = await addNewVisit(newVisit);
-    console.log({ newAllVisits });
-
-    dispatch(visitsActions.setAllVisits(newAllVisits));
+    const ref = uuid().slice(0, 6);
+    const params = { reference: ref, active: false };
+    const { consultant, reference, _id } = await addNewVisitor(params);
+    dispatch(visitorActions.setVisitor({ consultant, reference, _id }));
   }
 
   return (

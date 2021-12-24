@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const visitSchema = new Schema(
+const visitorSchema = new Schema(
   {
     reference: {
       type: String,
@@ -19,6 +19,6 @@ const visitSchema = new Schema(
   { timestamps: true }
 );
 
-const Visit = mongoose.model('Visit', visitSchema);
+const Visitor = mongoose.model('Visitor', visitorSchema);
 
-module.exports = Visit;
+module.exports = Visitor;

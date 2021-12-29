@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const Header = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  // const loggedInUser = useSelector((state) => state.auth.loggedInUser.email);
+  const loggedInUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   function handleLogout() {
@@ -22,7 +22,7 @@ const Header = () => {
         <nav className={css.nav}>
           {isAuthenticated && (
             <>
-              {/* <span> Logged in as: {loggedInUser}</span> */}
+              <span> Logged in as: {loggedInUser}</span>
               <Link onClick={handleLogout} to='/'>
                 Logout
               </Link>

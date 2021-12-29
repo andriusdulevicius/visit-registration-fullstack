@@ -11,8 +11,6 @@ export const visitorSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {
     setVisitor: (state, action) => {
-      console.log('$$$ state', state);
-      console.log('$$$ action.payload', action.payload);
       return { ...state, ...action.payload };
     },
   },

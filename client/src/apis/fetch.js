@@ -15,12 +15,6 @@ const reqOptions = {
 
 export const addNewVisitor = async (newVisitor) => {
   try {
-    // const data = await fetch(`${fetchApiUrl}/allConsultants`, reqOptions);
-    // const consultants = await data.json();
-    // const loggedInConsultants = consultants.filter((c) => c.isLoggedIn);
-    // const leastBusyConsultant = loggedInConsultants.sort((a, b) => (a.visits.length < b.visits.length ? 1 : -1))[0];
-    // console.log(leastBusyConsultant);
-
     const res = await fetch(`${fetchApiUrl}/visitor`, {
       method: 'POST',
       body: JSON.stringify(newVisitor),
@@ -80,6 +74,20 @@ export const login = async (email, password, isLoggedIn) => {
     const res = await fetch(`${fetchApiUrl}/login`, {
       method: 'POST',
       body: JSON.stringify({ email, password, isLoggedIn }),
+      ...reqOptions,
+    });
+
+    return await res.json();
+  } catch (err) {
+    console.log('An error trying to validate consultant', err);
+  }
+};
+
+export const logout = async (email, isLoggedIn) => {
+  try {
+    const res = await fetch(`${fetchApiUrl}/login`, {
+      method: 'POST',
+      body: JSON.stringify({ email, isLoggedIn }),
       ...reqOptions,
     });
 

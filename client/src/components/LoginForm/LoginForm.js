@@ -30,6 +30,7 @@ const LoginForm = () => {
     }
 
     const authentification = await login(email, password, true);
+    console.log({ authentification });
 
     if (!authentification.error) {
       dispatch(authActions.login(email));

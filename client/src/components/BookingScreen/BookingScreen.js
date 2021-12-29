@@ -13,7 +13,9 @@ const BookingScreen = () => {
 
   const [peopleInLine, setPeopleInLine] = useState(0);
   const [timeToWait, setTimeToWait] = useState(0);
-  const { consultant, _id, reference: ref } = useSelector((state) => state.visitor);
+  const [sessionIsOver, setSessionIsOver] = useState(false);
+  const visitor = useSelector((state) => state.visitor);
+  const { consultant, _id, reference: ref, active } = visitor;
 
   const navigate = useNavigate();
 
@@ -31,15 +33,19 @@ const BookingScreen = () => {
       setPeopleInLine(peopleInFront);
       setTimeToWait(waitTime);
     }
-  }, [consultant]);
+  }, [visitor]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       getVisitor(ref)
         .then((data) => {
+          if (data.length === 0) {
+            setSessionIsOver();
+          }
           const { consultant, reference, _id } = data[0];
           dispatch(visitorActions.setVisitor({ consultant, reference, _id }));
         })
+
         .catch((err) => console.error(err));
     }, config.dataUptadeRate);
 

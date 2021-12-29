@@ -22,18 +22,3 @@ Content-Type: application/json
     "visits": []
 }
 
-### get consultant
-
-POST http://localhost:5000/consultant
-Content-Type: application/json
-
-{
-    "email":"nfq@gmail.com",
-    "password":"cool",
-    "isLoggedIn": true
-}
-
-### delete visitor
-
-DELETE http://localhost:5000/visitor?reference=d8bc84
-Content-Type: application/json

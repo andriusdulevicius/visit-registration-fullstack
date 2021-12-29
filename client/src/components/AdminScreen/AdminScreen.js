@@ -4,7 +4,7 @@ import css from './AdminScreen.module.css';
 import OneVisitCard from './OneVisitCard';
 import config from '../../config';
 import { authActions, consultantActions } from '../../store';
-import { getConsultant } from '../../apis/fetch';
+import { getConsultant, logout } from '../../apis/fetch';
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
@@ -31,7 +31,8 @@ const AdminScreen = () => {
     return () => clearInterval(interval);
   }, [consultantEmail]);
 
-  function handleLogout() {
+  async function handleLogout() {
+    await logout(consultantEmail, false);
     dispatch(authActions.logout());
   }
 
@@ -56,6 +57,7 @@ const AdminScreen = () => {
                 <OneVisitCard
                   key={_id}
                   id={_id}
+                  allVisits={consultantVisitors}
                   active={active}
                   reference={reference}
                   createdAt={createdAt.slice(11, 16)}
@@ -66,10 +68,9 @@ const AdminScreen = () => {
       ) : (
         <div className={css.noVisitors}>Currently there are no visitors in the queue</div>
       )}
-
-      {/* <button className={css.logout} onClick={handleLogout}>
+      <button className={css.logout} onClick={handleLogout}>
         Logout
-      </button> */}
+      </button>
     </div>
   );
 };

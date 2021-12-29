@@ -112,6 +112,21 @@ router.post('/consultant', async (req, res) => {
   }
 });
 
+router.put('/consultant', async (req, res) => {
+  try {
+    const { email, isLoggedIn } = req.body;
+    await Consultant.findOneAndUpdate(
+      { email },
+      {
+        isLoggedIn,
+      }
+    );
+    res.send({ success: true, msg: `Consultant ${email} has logged in or logged out.` });
+  } catch (err) {
+    res.json(err);
+  }
+});
+
 router.get('/allConsultants', async (req, res) => {
   try {
     const consultants = await Consultant.find();
@@ -124,16 +139,17 @@ router.get('/allConsultants', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const consultant = await Consultant.findOne({ email: req.body.email });
-    const validPassword = await bcrypt.compare(req.body.password, consultant.password);
+    const validPassword = req.body.password ? await bcrypt.compare(req.body.password, consultant.password) : true;
 
     if (validPassword) {
-      const updatedConsultant = consultant.update({ $set: { isLoggedIn: req.body.isLoggedIn } }, { new: true });
+      const updatedConsultant = await consultant.update({ $set: { isLoggedIn: req.body.isLoggedIn } }, { new: true });
+
       res.json(updatedConsultant);
     } else {
       res.status(400).json({ error: 'Invalid Password' });
     }
   } catch (err) {
-    res.status(500).json('internal error');
+    res.status(500).json({ error: err });
   }
 });
 

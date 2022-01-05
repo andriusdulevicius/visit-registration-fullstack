@@ -10,7 +10,7 @@ const PublicScreen = () => {
   const dispatch = useDispatch();
 
   async function handleNewBooking() {
-    const ref = uuid().slice(0, 6);
+    const ref = uuid().slice(0, 6).toUpperCase();
     const params = { reference: ref, active: false };
     const { consultant, reference, _id } = await addNewVisitor(params);
     dispatch(visitorActions.setVisitor({ consultant, reference, _id }));

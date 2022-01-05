@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import css from './AdminScreen.module.css';
 import { cancelVisitor, editVisitorStatus } from '../../apis/fetch';
-import { consultantActions } from '../../store';
 
 const OneVisitCard = ({ reference, createdAt, allVisits, id, active }) => {
   const [visitors, setVisitors] = useState(allVisits);
   const [isActive, setIsActive] = useState(active);
-  console.log('$$$ visitors', visitors);
 
   async function setActiveVisit(reference) {
     const isThereActiveVisits = visitors.find((v) => v.active);
-    console.log('$$$ isThereActiveVisits', isThereActiveVisits);
     if (!isThereActiveVisits) {
       setIsActive(true);
       await editVisitorStatus(reference, { active: true });
@@ -19,7 +16,6 @@ const OneVisitCard = ({ reference, createdAt, allVisits, id, active }) => {
 
   async function handleCancelVisit(reference) {
     const newVisitors = visitors.filter((v) => v !== id);
-    console.log('$$$ newVisitors', newVisitors);
     setVisitors(newVisitors);
     await cancelVisitor(reference);
   }

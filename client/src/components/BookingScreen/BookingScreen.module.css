@@ -29,6 +29,9 @@
 .yellow {
   background-color: rgb(243, 243, 113);
 }
+.red {
+  background-color: rgb(172, 46, 46);
+}
 
 .info {
   text-align: center;

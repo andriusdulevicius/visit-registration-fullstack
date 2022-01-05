@@ -29,7 +29,7 @@ const LoginForm = () => {
       setErr('INVALID_EMAIL');
     }
 
-    const authentification = await login(email, password, true);
+    const authentification = await login(email, password, true, false);
     console.log({ authentification });
 
     if (!authentification.error) {

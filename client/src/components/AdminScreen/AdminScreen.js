@@ -4,12 +4,14 @@ import css from './AdminScreen.module.css';
 import OneVisitCard from './OneVisitCard';
 import config from '../../config';
 import { authActions, consultantActions } from '../../store';
-import { getConsultant, logout } from '../../apis/fetch';
+import { getConsultant, editConsultantStatus } from '../../apis/fetch';
 
 const AdminScreen = () => {
   const dispatch = useDispatch();
 
   const [consultant, setConsultant] = useState(undefined);
+  const consultantActive = useSelector((state) => state.consultant.isActive);
+  const [activeConsultant, setActiveConsultant] = useState(false);
   const consultantVisitors = consultant?.visitors;
   const consultantEmail = useSelector((state) => state.auth.user);
 
@@ -32,8 +34,14 @@ const AdminScreen = () => {
   }, [consultantEmail]);
 
   async function handleLogout() {
-    await logout(consultantEmail, false);
+    await editConsultantStatus(consultantEmail, false, false);
     dispatch(authActions.logout());
+  }
+
+  async function setActiveStatus(status) {
+    setActiveConsultant(status);
+    editConsultantStatus(consultantEmail, true, status);
+    console.log({ activeConsultant });
   }
 
   return (
@@ -50,7 +58,7 @@ const AdminScreen = () => {
             </tr>
           </thead>
           <tbody>
-            {consultantVisitors
+            {[...consultantVisitors]
               .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
               .slice(0, 6)
               .map(({ reference, createdAt, _id, active }) => (
@@ -68,6 +76,12 @@ const AdminScreen = () => {
       ) : (
         <div className={css.noVisitors}>Currently there are no visitors in the queue</div>
       )}
+      <button disabed={activeConsultant} className={css.active} onClick={() => setActiveStatus(true)}>
+        Start getting new costumers
+      </button>
+      <button disabed={!activeConsultant} className={css.logout} onClick={() => setActiveStatus(false)}>
+        Stop getting new costumers
+      </button>
       <button className={css.logout} onClick={handleLogout}>
         Logout
       </button>

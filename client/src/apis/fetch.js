@@ -69,11 +69,11 @@ export const getConsultant = async (email) => {
   }
 };
 
-export const login = async (email, password, isLoggedIn) => {
+export const login = async (email, password, isLoggedIn, isActive) => {
   try {
     const res = await fetch(`${fetchApiUrl}/login`, {
       method: 'POST',
-      body: JSON.stringify({ email, password, isLoggedIn }),
+      body: JSON.stringify({ email, password, isLoggedIn, isActive }),
       ...reqOptions,
     });
 
@@ -83,11 +83,11 @@ export const login = async (email, password, isLoggedIn) => {
   }
 };
 
-export const logout = async (email, isLoggedIn) => {
+export const editConsultantStatus = async (email, isLoggedIn, isActive) => {
   try {
     const res = await fetch(`${fetchApiUrl}/login`, {
       method: 'POST',
-      body: JSON.stringify({ email, isLoggedIn }),
+      body: JSON.stringify({ email, isLoggedIn, isActive }),
       ...reqOptions,
     });
 

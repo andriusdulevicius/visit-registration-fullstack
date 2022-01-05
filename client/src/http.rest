@@ -6,7 +6,8 @@ Content-Type: application/json
 {
     "email":"andrius@gmail.com",
     "password":"cool",
-    "isLoggedIn": "true",
+    "isLoggedIn": false,
+    "isActive": false,
     "visits": []
 }
 
@@ -18,7 +19,8 @@ Content-Type: application/json
 {
     "email":"nfq@gmail.com",
     "password":"cool",
-    "isLoggedIn": "true",
+    "isLoggedIn": false,
+    "isActive": false,
     "visits": []
 }
 

@@ -15,6 +15,10 @@ const consultantSchema = new Schema(
       type: Boolean,
       required: true,
     },
+    isActive: {
+      type: Boolean,
+      required: true,
+    },
     visitors: [
       {
         type: Schema.Types.ObjectId,

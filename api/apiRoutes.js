@@ -21,8 +21,8 @@ router.get('/visitor', async (req, res) => {
 router.post('/visitor', async (req, res) => {
   try {
     const consultants = await Consultant.find();
-    const loggedInConsultants = consultants.filter((c) => c.isLoggedIn);
-    const leastBusyConsultant = loggedInConsultants.sort((a, b) => (a.visitors.length < b.visitors.length ? -1 : 1));
+    const activeInConsultants = consultants.filter((c) => c.isActive);
+    const leastBusyConsultant = activeInConsultants.sort((a, b) => (a.visitors.length < b.visitors.length ? -1 : 1));
     const newVisitor = await Visitor.create({ ...req.body, consultant: leastBusyConsultant[0] });
 
     await Consultant.findOneAndUpdate(
@@ -114,11 +114,12 @@ router.post('/consultant', async (req, res) => {
 
 router.put('/consultant', async (req, res) => {
   try {
-    const { email, isLoggedIn } = req.body;
+    const { email, isLoggedIn, isActive } = req.body;
     await Consultant.findOneAndUpdate(
       { email },
       {
         isLoggedIn,
+        isActive,
       }
     );
     res.send({ success: true, msg: `Consultant ${email} has logged in or logged out.` });
@@ -142,7 +143,10 @@ router.post('/login', async (req, res) => {
     const validPassword = req.body.password ? await bcrypt.compare(req.body.password, consultant.password) : true;
 
     if (validPassword) {
-      const updatedConsultant = await consultant.update({ $set: { isLoggedIn: req.body.isLoggedIn } }, { new: true });
+      const updatedConsultant = await consultant.update(
+        { $set: { isLoggedIn: req.body.isLoggedIn, isActive: req.body.isActive } },
+        { new: true }
+      );
 
       res.json(updatedConsultant);
     } else {

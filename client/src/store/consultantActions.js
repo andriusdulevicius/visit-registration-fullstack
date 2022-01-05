@@ -5,6 +5,7 @@ const INITIAL_STATE = {
     visitors: [],
     email: '',
     isLoggedIn: '',
+    isActive: '',
   },
 };
 

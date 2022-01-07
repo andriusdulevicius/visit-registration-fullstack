@@ -4,7 +4,7 @@ import LoginForm from '../components/LoginForm/LoginForm';
 import AdminScreen from '../components/AdminScreen/AdminScreen';
 
 const Admin = () => {
-  const auth = useSelector((state) => state.auth.isAuthenticated);
+  const auth = useSelector((state) => state.consultant.email);
   return auth ? <AdminScreen /> : <LoginForm />;
 };
 

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import css from './LoginForm.module.css';
-import { authActions } from '../../store';
-import { login } from '../../apis/fetch';
+import { consultantActions } from '../../store';
+import { login } from '../../api/fetch';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -29,21 +29,14 @@ const LoginForm = () => {
       setErr('INVALID_EMAIL');
     }
 
-    const authentification = await login(email, password, true, false);
-    console.log({ authentification });
+    const loggedInConsultant = await login(email, password);
 
-    if (!authentification.error) {
-      dispatch(authActions.login(email));
-    } else return setErr('INVALID_USER');
+    if (!loggedInConsultant?.error) {
+      dispatch(consultantActions.setConsultant(loggedInConsultant));
+    } else {
+      setErr('INVALID_USER');
+    }
   };
-
-  useEffect(() => {
-    return () => {
-      setErr(null);
-      setEmail(null);
-      setPassword(null);
-    };
-  }, []);
 
   return (
     <section className={css.auth}>

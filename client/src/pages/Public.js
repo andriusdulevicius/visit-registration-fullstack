@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import PublicScreen from '../components/PublicScreen/PublicScreen';
 
 const Public = () => {
-  const auth = useSelector((state) => state.auth.isAuthenticated);
+  const auth = useSelector((state) => state.consultant.email);
   return auth ? <Navigate to='/admin' /> : <PublicScreen />;
 };
 

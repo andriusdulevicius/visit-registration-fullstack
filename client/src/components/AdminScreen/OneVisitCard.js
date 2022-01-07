@@ -1,29 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import css from './AdminScreen.module.css';
-import { cancelVisitor, editVisitorStatus } from '../../apis/fetch';
+import { cancelVisitor, editVisitorStatus } from '../../api/fetch';
+import { consultantActions } from '../../store';
+import { useDispatch } from 'react-redux';
 
-const OneVisitCard = ({ reference, createdAt, allVisits, id, active }) => {
-  const [visitors, setVisitors] = useState(allVisits);
+const OneVisitCard = ({ reference, createdAt, allVisits, id, active, setVisitors }) => {
+  const dispatch = useDispatch();
   const [isActive, setIsActive] = useState(active);
 
-  async function setActiveVisit(reference) {
-    const isThereActiveVisits = visitors.find((v) => v.active);
-    if (!isThereActiveVisits) {
-      setIsActive(true);
+  const setActiveVisit = async (reference) => {
+    const visitorAlreadyCalled = allVisits.find((v) => v.active);
+    if (!visitorAlreadyCalled) {
       await editVisitorStatus(reference, { active: true });
+      setIsActive(true);
     }
-  }
+  };
 
-  async function handleCancelVisit(reference) {
-    const newVisitors = visitors.filter((v) => v !== id);
+  const cancelVisit = async (reference) => {
+    const newVisitors = allVisits.filter((v) => v._id !== id);
     setVisitors(newVisitors);
+    dispatch(consultantActions.updateVisitors(newVisitors));
     await cancelVisitor(reference);
-  }
-
-  useEffect(() => {
-    setVisitors(allVisits);
-    setIsActive(active);
-  }, [allVisits, active]);
+  };
 
   return (
     <tr>
@@ -31,7 +29,7 @@ const OneVisitCard = ({ reference, createdAt, allVisits, id, active }) => {
       <td className={css.created}>{createdAt}</td>
       <td className={css.buttons}>
         <button
-          className={css.invite}
+          className={`${css.invite} ${css.button}`}
           disabled={isActive}
           onClick={() => {
             setActiveVisit(reference);
@@ -40,18 +38,18 @@ const OneVisitCard = ({ reference, createdAt, allVisits, id, active }) => {
           Invite client
         </button>
         <button
-          className={css.end}
+          className={`${css.end} ${css.button}`}
           disabled={!isActive}
           onClick={() => {
-            handleCancelVisit(reference);
+            cancelVisit(reference);
           }}
         >
           End of visit
         </button>
         <button
-          className={css.cancel}
+          className={`${css.cancel} ${css.button}`}
           onClick={() => {
-            handleCancelVisit(reference);
+            cancelVisit(reference);
           }}
         >
           Cancel visit

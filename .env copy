@@ -1,0 +1,3 @@
+MONGO_CONN_STRING=YOUR MONGO DB STRING
+HEROKU_HOST=https://nfq-task-react-express.herokuapp.com/
+SERVER_PORT=5000

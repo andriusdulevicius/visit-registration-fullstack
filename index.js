@@ -12,10 +12,10 @@ mongoose
     useUnifiedTopology: true,
     useNewUrlParser: true,
   })
-  .then((result) => {
+  .then(() => {
     console.log(`Mongoose connected on port ${PORT}`);
   })
-  .catch((err) => {
+  .catch(() => {
     console.log('Connection error');
   });
 mongoose.set('useFindAndModify', false);

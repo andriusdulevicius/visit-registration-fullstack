@@ -11,10 +11,6 @@ const consultantSchema = new Schema(
       type: String,
       required: true,
     },
-    isLoggedIn: {
-      type: Boolean,
-      required: true,
-    },
     isActive: {
       type: Boolean,
       required: true,

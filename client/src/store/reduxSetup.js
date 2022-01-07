@@ -3,7 +3,7 @@ import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import { visitorSlice } from './visitorActions';
-import { authSlice } from './authActions';
+import { activeConsultantsSlice } from './activeConsultantsAction';
 import { consultantSlice } from './consultantActions';
 import thunk from 'redux-thunk';
 
@@ -15,8 +15,8 @@ const persistConfig = {
 
 const reducers = combineReducers({
   visitor: visitorSlice.reducer,
-  auth: authSlice.reducer,
   consultant: consultantSlice.reducer,
+  activeConsultants: activeConsultantsSlice.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, reducers);
 

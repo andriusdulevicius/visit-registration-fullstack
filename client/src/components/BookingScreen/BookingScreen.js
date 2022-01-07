@@ -6,7 +6,7 @@ import css from './BookingScreen.module.css';
 import AnimatedCard from './AnimatedCard';
 import config from '../../config';
 import { visitorActions } from '../../store';
-import { cancelVisitor, getVisitor } from '../../apis/fetch';
+import { cancelVisitor, getVisitor } from '../../api/fetch';
 
 const BookingScreen = () => {
   const dispatch = useDispatch();
@@ -25,6 +25,31 @@ const BookingScreen = () => {
     navigate('/');
   };
 
+  const getVisitorData = async (ref) => {
+    try {
+      const visitor = await getVisitor(ref);
+      if (visitor.length === 0) {
+        setSessionIsOver(true);
+      } else {
+        const { consultant, reference, _id, active } = visitor[0];
+        setVisitStarted(active);
+        dispatch(visitorActions.setVisitor({ consultant, reference, _id, active }));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Timer to get most recent data
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      await getVisitorData(ref);
+    }, config.dataUptadeRate);
+    getVisitorData(ref);
+
+    return () => clearInterval(interval);
+  }, [ref]);
+
   useEffect(() => {
     if (consultant) {
       const { visitors } = consultant;
@@ -35,26 +60,6 @@ const BookingScreen = () => {
       setTimeToWait(waitTime);
     }
   }, [visitor]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      getVisitor(ref)
-        .then((data) => {
-          if (data.length === 0) {
-            setSessionIsOver(true);
-          }
-          if (data.length > 0) {
-            const { consultant, reference, _id, active } = data[0];
-            setVisitStarted(active);
-            dispatch(visitorActions.setVisitor({ consultant, reference, _id, active }));
-          }
-        })
-
-        .catch((err) => console.error(err));
-    }, config.dataUptadeRate);
-
-    return () => clearInterval(interval);
-  }, [ref]);
 
   return (
     <div className='container'>
